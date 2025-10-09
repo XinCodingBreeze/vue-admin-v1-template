@@ -1,6 +1,6 @@
 <template>
   <div class="file-identification">
-    <div class="content-wrapper">
+    <div class="content-wrapper common-container">
       <!-- 左侧图片区域 -->
       <div class="image-section">
         <div class="upload-area" @click="triggerUpload" v-if="!imageUrl">
@@ -125,7 +125,6 @@ onBeforeUnmount(async () => {
 .content-wrapper {
   display: flex;
   gap: 20px;
-  height: calc(100vh - 100px);
 }
 
 .image-section,

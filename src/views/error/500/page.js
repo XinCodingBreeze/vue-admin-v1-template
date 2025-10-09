@@ -10,4 +10,5 @@ export default {
   name: "500",
   icon: "Warning",
   menuOrder: 3,
+  hideTitle: true,
 };

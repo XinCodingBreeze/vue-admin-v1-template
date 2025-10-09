@@ -13,12 +13,12 @@ import { Directive } from "@/directives/index.js";
 import App from "./App.vue";
 import router from "./router";
 import "@/theme.css";
-import useResize from "v-resize-hx"; // 已移除：项目中未使用且存在性能问题
+import useResize from "v-resize-hx";
 
 const app = createApp(App);
 Directive(app);
 app.use(router);
-app.use(useResize) // 已移除：项目中未使用且存在性能问题
+app.use(useResize) 
 app.mount("#app");
 
 configureApp(app);

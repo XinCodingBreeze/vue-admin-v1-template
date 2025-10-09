@@ -47,7 +47,9 @@
           <div class="content-card">
             <!-- Component 是当前路由匹配到的组件 -->
             <router-view v-slot="{ Component }">
-              <p class="title">{{ route.meta.name }}</p>
+              <p class="title" v-if="!route.meta.hideTitle">
+                {{ route.meta.name }}
+              </p>
               <transition name="fade" mode="out-in">
                 <component :is="Component" />
               </transition>

@@ -10,4 +10,5 @@ export default {
   name: "403",
   icon: "Lock",
   menuOrder: 2,
+  hideTitle: true,
 };

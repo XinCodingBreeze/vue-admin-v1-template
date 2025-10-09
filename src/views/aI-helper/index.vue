@@ -1,5 +1,5 @@
 <template>
-  <div class="ai-chat-container">
+  <div class="ai-chat-container common-container">
     <div class="chat-header">
       <h2>AI 助手</h2>
     </div>
@@ -113,7 +113,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .ai-chat-container {
-  height: calc(100vh - 260px);
   display: flex;
   flex-direction: column;
   background-color: #f8f9fa;
