@@ -27,7 +27,10 @@ function processRoutes(modules) {
 
     // 创建路由对象
     const route = {
-      path: pathSegments.length === 1 ? `/${pathSegments[0]}` : pathSegments[pathSegments.length - 1],
+      path:
+        pathSegments.length === 1
+          ? `/${pathSegments[0]}`
+          : pathSegments[pathSegments.length - 1],
       name,
       component: comMoudles[component],
       meta: {
@@ -56,7 +59,6 @@ function processRoutes(modules) {
     if (parent) {
       parent.children.push({
         ...route,
-
       }); // 直接使用完整的路由对象
     } else {
       rootRoutes.push(route);
@@ -66,7 +68,16 @@ function processRoutes(modules) {
   return rootRoutes;
 }
 
-console.log(processRoutes(pagesMoudles), "processRoutes");
+// 排序
+console.log(
+  processRoutes(pagesMoudles).sort(
+    (a, b) => a.meta.menuOrder - b.meta.menuOrder,
+  ),
+  "processRoutes",
+);
+const sortRoutes = processRoutes(pagesMoudles).sort(
+  (a, b) => a.meta.menuOrder - b.meta.menuOrder,
+);
 // 生成路由配置
 const routes = [
   {
@@ -76,8 +87,8 @@ const routes = [
   {
     path: "/",
     component: Layout,
-    children: processRoutes(pagesMoudles),
-    redirect: processRoutes(pagesMoudles)[0].path,
+    children: sortRoutes,
+    redirect: sortRoutes[0].path,
   },
 ];
 
@@ -88,7 +99,6 @@ export const router = createRouter({
   history: createWebHistory("/"),
   routes,
 });
-
 
 // router.beforeEach((to, from, next) => {
 //   let user = JSON.parse(localStorage.getItem("user"));
