@@ -23,7 +23,9 @@
 
           <div class="user-info">
             <el-badge :value="3" class="notice-badge">
-              <el-icon><Bell /></el-icon>
+              <el-icon>
+                <Bell />
+              </el-icon>
             </el-badge>
             <el-avatar class="avatar" :size="32" :src="userInfo?.avatar" />
             <el-dropdown trigger="click">
@@ -82,6 +84,7 @@ const handleChangePassword = () => {
 
 <style lang="scss">
 @use "@/assets/styles/layout-style.scss";
+
 .username {
   cursor: pointer;
 }

@@ -1,7 +1,10 @@
 <template>
   <div class="demo-page">
     <h1>示例页面</h1>
-    <p>这里演示如何在页面中使用自动生成的路由映射文件 <code>all.router.js</code>。</p>
+    <p>
+      这里演示如何在页面中使用自动生成的路由映射文件
+      <code>all.router.js</code>。
+    </p>
 
     <section class="router-list">
       <h3>搜索并跳转路由（含“权限”示例）：</h3>
@@ -47,7 +50,6 @@ import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ROUTERSDATA } from "@/router/all.router.js";
 
-const pageTitle = "示例页面";
 const router = useRouter();
 const selectedPath = ref("");
 
@@ -138,4 +140,3 @@ function onSelect(val) {
   font-size: 13px;
 }
 </style>
-

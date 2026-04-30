@@ -4,7 +4,9 @@
       <!-- 左侧图片区域 -->
       <div class="image-section">
         <div class="upload-area" @click="triggerUpload" v-if="!imageUrl">
-          <el-icon :size="48"><Upload /></el-icon>
+          <el-icon :size="48">
+            <Upload />
+          </el-icon>
           <p>点击上传图片到此处</p>
         </div>
         <div class="image-preview-container" v-else>

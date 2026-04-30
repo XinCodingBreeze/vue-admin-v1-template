@@ -16,7 +16,7 @@ const router = useRouter();
 const activeIndex = ref(route.path);
 
 // 菜单点击处理
-const menuSelect = (path, keyPath) => {
+const menuSelect = (path) => {
   router.push(path);
   activeIndex.value = path;
 };

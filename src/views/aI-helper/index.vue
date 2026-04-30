@@ -38,7 +38,9 @@
         @click="sendMessage"
         class="send-button"
       >
-        <el-icon><Position /></el-icon>
+        <el-icon>
+          <Position />
+        </el-icon>
         发送
       </el-button>
     </div>
@@ -99,7 +101,7 @@ const sendMessage = async () => {
 
     messages.value.push(aiMessage);
   } catch (error) {
-    ElMessage.error("发送消息失败：" + error.message);
+    ElMessage.error(`发送消息失败：${error.message}`);
   } finally {
     loading.value = false;
     scrollToBottom();
