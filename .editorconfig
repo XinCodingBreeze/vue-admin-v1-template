@@ -1,0 +1,20 @@
+# EditorConfig 跨编辑器统一配置
+# 确保不同开发者使用不同 IDE（VS Code / WebStorm / Vim 等）时，
+# 基础格式保持一致（缩进、换行符、编码等）
+# 参考文档：https://editorconfig.org
+
+# 表示这是项目根目录的配置，编辑器不再向上查找
+root = true
+
+# 所有文件的默认配置
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown 文件允许行尾空格（Markdown 中两个空格表示换行）
+[*.md]
+trim_trailing_whitespace = false
