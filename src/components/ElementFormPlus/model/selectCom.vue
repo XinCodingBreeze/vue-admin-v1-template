@@ -14,8 +14,7 @@
   </el-select>
 </template>
 <script setup>
-import { ref, defineProps } from "vue";
-const props = defineProps({
+defineProps({
   clearable: {
     type: Boolean,
     default: true,
@@ -32,5 +31,4 @@ const props = defineProps({
   },
 });
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

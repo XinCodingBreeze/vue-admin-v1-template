@@ -26,7 +26,9 @@
           class="avatar"
           fit="cover"
         />
-        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        <el-icon v-else class="avatar-uploader-icon">
+          <Plus />
+        </el-icon>
       </el-upload>
 
       <div v-else class="image-list">
@@ -84,6 +86,8 @@ import { ElMessage } from "element-plus";
 import { nextTick, onMounted, ref, watch, computed } from "vue";
 import ImageEditor from "./imageEditor/index.vue";
 import Compressorjs from "compressorjs";
+
+// ===== Props & Emits =====
 const props = defineProps({
   modelValue: {
     default: () => "",
@@ -117,52 +121,71 @@ const props = defineProps({
     type: String,
   },
 });
+const emit = defineEmits(["update:modelValue"]);
 
+// ===== 常量 =====
+const FILE_URL = "/file/uploadFile";
+
+// ===== 响应式状态 =====
+const fileList = ref([]);
+const imageUrl = ref("");
+const showEditor = ref(false);
+const currentEditImage = ref("");
+const dialogImageUrl = ref("");
+const dialogVisible = ref(false);
+
+// ===== 计算属性 =====
 const _fileList = computed(() => {
   return fileList.value.map((item) => {
     return item.url;
   });
 });
 
-const emit = defineEmits(["update:modelValue"]);
-const FILE_URL = "/file/uploadFile";
-const fileList = ref([]);
-const handleRemove = (uploadFile, uploadFiles) => {
-  handleEmit();
-};
-const handleExceed = () => {
-  ElMessage({
-    message: "超出上传数量限制",
-    type: "error",
+// 计算limit 如果等于1的话就false 反之就返回limit
+const limit = computed(() => {
+  return props.limit == 1 ? false : props.limit;
+});
+
+// ===== 方法（按依赖顺序，被依赖的在前） =====
+
+/**
+ * 处理 v-model 更新
+ */
+const handleEmit = () => {
+  nextTick(() => {
+    let value = null;
+    if (props.limit > 1) {
+      value = fileList.value
+        .filter((item) => {
+          return item.status == "success" || !item.status;
+        })
+        .map((item) => {
+          return item.response ? item.response.entity.fileUrl : item.url;
+        });
+      if (props.mode == 1) {
+        value = value.join(",");
+      }
+    } else {
+      value = imageUrl.value;
+    }
+    emit("update:modelValue", value);
   });
 };
-const showEditor = ref(false);
-// 修改编辑处理函数
-const currentEditImage = ref("");
-const handleEdit = (item) => {
-  currentEditImage.value = item.url;
-  showEditor.value = true;
-};
 
-const handleSaveEdit = () => {
-};
-watch(
-  () => props.modelValue,
-  () => {
-    handleInit();
-  },
-);
+/**
+ * 初始化文件列表
+ */
 const handleInit = () => {
   let v = props.modelValue;
   let arr = [];
 
   if (props.mode == 1) {
-    if (v == null || v == undefined) {
+    if (v == null) {
       v = "";
     }
     arr = v.split(",");
   } else {
-    if (v == null || v == undefined) {
+    if (v == null) {
       v = [];
     }
     arr = v;
@@ -182,46 +205,57 @@ const handleInit = () => {
   }
 };
 
-/**
- * 处理
- */
-const handleEmit = () => {
-  nextTick(() => {
-    let value = null;
-    if (props.limit > 1) {
-      value = fileList.value
-        .filter((item) => {
-          return item.status == "success" || !item.status;
-        })
-        .map((item) => {
-          return item.response ? item.response.entity.fileUrl : item.url;
-        });
-      if (props.mode == 1) {
-        value = value.join(",");
-      }
-    } else {
-      value = value = imageUrl.value;
-    }
-    emit("update:modelValue", value);
+const handleRemove = () => {
+  handleEmit();
+};
+
+const handleExceed = () => {
+  ElMessage({
+    message: "超出上传数量限制",
+    type: "error",
   });
 };
-const imageUrl = ref("");
-const handleSuccess = (response, file, fileList) => {
+
+const handleSaveEdit = () => {};
+
+const handleSuccess = (response, file, files) => {
   if (props.limit == 1) {
     imageUrl.value = response.entity.fileUrl;
     handleEmit();
     return;
   }
-  let len = fileList
+  const len = files
     .map((item) => {
       return item.status ? item.status : "success";
     })
     .filter((item) => {
       return item == "success";
     }).length;
-  if (len == fileList.length) {
+  if (len == files.length) {
     handleEmit();
   }
+};
+
+const handlerCompressorjs = (file) => {
+  return new Promise((resolve, reject) => {
+    new Compressorjs(file, {
+      quality: 0.4,
+      convertTypes: [
+        "image/png",
+        "image/webp",
+        "image/jpeg",
+        "image/gif",
+        "image/svg+xml",
+      ],
+      convertSize: 2 * 1024 * 1024,
+      success: (compressedFile) => {
+        resolve(compressedFile);
+      },
+      error: (err) => {
+        reject(err);
+      },
+    });
+  });
 };
 
 const beforeUpload = async (file) => {
@@ -233,43 +267,12 @@ const beforeUpload = async (file) => {
   try {
     const compressedFile = await handlerCompressorjs(file);
     return compressedFile;
-  } catch (e) {
+  } catch {
     ElMessage.error("图片压缩失败");
     return false;
   }
 };
 
-const handlerCompressorjs = (file) => {
-  return new Promise((resolve, reject) => {
-    new Compressorjs(file, {
-      quality: 0.4,
-      // 所有图片都压缩
-      convertTypes: [
-        "image/png",
-        "image/webp",
-        "image/jpeg",
-        "image/gif",
-        "image/svg+xml",
-        "image/gif",
-      ],
-      convertSize: 2 * 1024 * 1024,
-      success: (compressedFile) => {
-        resolve(compressedFile);
-      },
-      error: (e) => {
-        console.error("压缩失败", e);
-        reject(e);
-      },
-    });
-  });
-};
-
-onMounted(() => {
-  handleInit();
-});
-
-const dialogImageUrl = ref("");
-const dialogVisible = ref(false);
 const handlePictureCardPreview = (uploadFile) => {
   dialogImageUrl.value = uploadFile.url;
   if (!props.isShowImage) {
@@ -277,9 +280,16 @@ const handlePictureCardPreview = (uploadFile) => {
   }
 };
 
-// 计算limit 如果等于1的话就false 反之就返回limit
-const limit = computed(() => {
-  return props.limit == 1 ? false : props.limit;
+// ===== 侦听器 & 生命周期 =====
+watch(
+  () => props.modelValue,
+  () => {
+    handleInit();
+  },
+);
+
+onMounted(() => {
+  handleInit();
 });
 </script>
 <style scoped lang="scss">
@@ -288,6 +298,7 @@ const limit = computed(() => {
   height: 178px;
   display: block;
 }
+
 .image-list {
   width: 100%;
   display: grid;
@@ -295,6 +306,7 @@ const limit = computed(() => {
   grid-template-columns: repeat(auto-fill, minmax(178px, 1fr));
   grid-template-rows: 178px;
   grid-gap: 10px;
+
   .avatar {
     cursor: pointer;
   }
@@ -304,11 +316,13 @@ const limit = computed(() => {
 <style lang="scss" scoped>
 .upload-container {
   display: flex;
+
   .image-container {
     width: 100%;
     display: flex;
   }
 }
+
 .avatar {
   width: 100%;
   height: 100%;
@@ -343,6 +357,7 @@ const limit = computed(() => {
   margin-top: 10px;
   font-size: 12px;
   color: #999999;
+
   .red {
     color: #f56c6c;
   }
@@ -354,11 +369,13 @@ const limit = computed(() => {
   height: 80px;
   width: 80px;
 }
+
 :deep(.el-image-viewer__next) {
   height: 80px;
   width: 80px;
   font-size: 40px;
 }
+
 :deep(.el-image-viewer__prev) {
   height: 80px;
   width: 80px;
@@ -369,6 +386,7 @@ const limit = computed(() => {
 :deep(.el-image-viewer__actions) {
   height: 80px;
   width: 450px;
+
   .el-image-viewer__actions__inner {
     font-size: 50px;
   }

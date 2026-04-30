@@ -10,19 +10,19 @@ let permissionList = [];
  * 设置权限列表（登录后调用）
  */
 export const setPermissionList = (list) => {
-    permissionList = list || [];
+  permissionList = list || [];
 };
 
 function checkPermission(el, binding) {
-    if (!binding.value) {
-        return;
-    }
-    if (!permissionList.includes(binding.value)) {
-        el.parentNode?.removeChild(el);
-    }
+  if (!binding.value) {
+    return;
+  }
+  if (!permissionList.includes(binding.value)) {
+    el.parentNode?.removeChild(el);
+  }
 }
 
 export const VRule = {
-    mounted: checkPermission,
-    updated: checkPermission,
+  mounted: checkPermission,
+  updated: checkPermission,
 };

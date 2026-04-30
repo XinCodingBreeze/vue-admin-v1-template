@@ -11,8 +11,7 @@
   </el-checkbox-group>
 </template>
 <script setup>
-import { defineProps } from "vue";
-const props = defineProps({
+defineProps({
   clearable: {
     type: Boolean,
     default: true,

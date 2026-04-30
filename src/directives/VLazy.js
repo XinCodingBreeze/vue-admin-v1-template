@@ -20,5 +20,5 @@ export const VLazy = {
       el._lazyObserver.disconnect();
       delete el._lazyObserver;
     }
-  }
+  },
 };

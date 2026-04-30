@@ -43,7 +43,7 @@ import checkboxCom from "./model/checkBoxCom.vue";
 import switchCom from "./model/switchCom.vue";
 import uploadCom from "./model/uploadCom.vue";
 import richEditorCom from "./model/richEditorCom.vue";
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 const ruleFormRef = ref(null);
 const props = defineProps({
   formList: {
@@ -92,7 +92,7 @@ defineExpose({
   ruleFormRef,
   validate: () => ruleFormRef.value?.validate(),
   resetFields: () => ruleFormRef.value?.resetFields(),
-  clearValidate: (props) => ruleFormRef.value?.clearValidate(props),
+  clearValidate: (fields) => ruleFormRef.value?.clearValidate(fields),
 });
 </script>
 <style lang="scss" scoped></style>

@@ -10,8 +10,7 @@
   </el-input>
 </template>
 <script setup>
-import { ref, defineProps } from "vue";
-const props = defineProps({
+defineProps({
   clearable: {
     type: Boolean,
     default: true,
