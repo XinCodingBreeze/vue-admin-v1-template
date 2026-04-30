@@ -16,8 +16,6 @@ export const handleDataValuesTrim = (data) => {
 
 // 定义一个全局方法来格式化数字，保留两位小数
 export const formatDecimal = (value) => {
-  console.log(value, 'valuevaluevaluevalue');
-
   if (value === '' || value === null) return '';
   let num = parseFloat(value);
   if (isNaN(num)) return '';

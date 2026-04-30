@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Layout from "@/layout/index.vue";
-import { getToken } from "@/utils/token";
-// const routes = [];
 
 // 自动生成路由文件
 let pagesMoudles = import.meta.glob("../views/**/page.js", {
@@ -68,13 +66,6 @@ function processRoutes(modules) {
   return rootRoutes;
 }
 
-// 排序
-console.log(
-  processRoutes(pagesMoudles).sort(
-    (a, b) => a.meta.menuOrder - b.meta.menuOrder,
-  ),
-  "processRoutes",
-);
 const sortRoutes = processRoutes(pagesMoudles).sort(
   (a, b) => a.meta.menuOrder - b.meta.menuOrder,
 );

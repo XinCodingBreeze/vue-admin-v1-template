@@ -26,8 +26,6 @@ function followSystemTheme() {
  * 监听主题变化，并存储到localStorage
  */
 watchEffect(() => {
-    console.log('变化了变化了');
-
     localStorage.setItem(LOCAL_KEY, theme.value)
     if (theme.value === 'OS') {
         followSystemTheme()

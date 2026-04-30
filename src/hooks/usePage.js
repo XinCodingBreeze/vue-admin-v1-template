@@ -1,5 +1,4 @@
 import { ref } from "vue";
-import { clone, cloneDeep, merge } from "lodash";
 export function usePage({ _apiFun = () => {}, _data = {} }) {
   // 表格数据
   const formData = ref([]);
@@ -32,8 +31,6 @@ export function usePage({ _apiFun = () => {}, _data = {} }) {
       ...queryData.value,
     });
     if (res.success) {
-      console.log(res, "rrrr");
-
       if (res.pageInfo?.list) {
         formData.value = res.pageInfo.list;
         total.value = res.pageInfo.total;

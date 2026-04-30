@@ -9,14 +9,14 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { handleDataValuesTrim } from './data';
-const baseURL = process.env.VITE_MODE == 'dev' ? '' : process.env.VITE_API_HOST;
+const baseURL = import.meta.env.VITE_APP_DEV === 'dev' ? '' : (import.meta.env.VITE_APP_API_URL || '');
 const service = axios.create({
   baseURL: baseURL,
   timeout: 8000 // 设置为5秒，单位是毫秒
 })
 service.interceptors.request.use(
   config => {
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("TOKEN");
     if (token) {
       if (!config.headers) {
         config.headers = {};
@@ -26,7 +26,6 @@ service.interceptors.request.use(
     }
     // 设置Accept-Language为中文
     config.headers['Accept-Language'] = 'zh-CN';
-    console.log(config)
 
     try {
       config.data = handleDataValuesTrim(config.data ?? {})
@@ -58,7 +57,8 @@ service.interceptors.response.use(
         duration: 2000
       })
       setTimeout(() => {
-        localStorage.clear();
+        localStorage.removeItem('TOKEN');
+        localStorage.removeItem('user');
         window.open(window.location.href, '_self')
       }, 2000);
 
@@ -72,10 +72,8 @@ service.interceptors.response.use(
         duration: 3 * 1000
       });
       return Promise.reject(new Error(res.message || 'Error'));
-    } else {
-      // 返回实际数据部分
-      return res;
     }
+    return res;
   },
   error => {
     console.error('err', error);

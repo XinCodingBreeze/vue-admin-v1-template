@@ -36,10 +36,8 @@
 
 <script setup>
 import MenuItem from "./menu.vue";
-import { useRouter, useRoute } from "vue-router";
 import { computed } from "vue";
 
-const router = useRouter();
 const props = defineProps({
   data: {
     type: Object,
@@ -58,11 +56,6 @@ const visibleChildren = computed(() => {
     (child) => child.meta?.isPageShow !== false,
   );
 });
-
-// 处理菜单点击
-const handleMenuClick = (path) => {
-  router.push(path);
-};
 </script>
 
 <style scoped lang="scss"></style>

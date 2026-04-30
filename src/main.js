@@ -16,9 +16,8 @@ import "@/theme.css";
 import useResize from "v-resize-hx";
 
 const app = createApp(App);
+configureApp(app);
 Directive(app);
 app.use(router);
-app.use(useResize) 
+app.use(useResize);
 app.mount("#app");
-
-configureApp(app);

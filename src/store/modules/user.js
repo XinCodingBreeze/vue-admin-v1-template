@@ -19,7 +19,8 @@ export const useUserStore = defineStore('user', {
             ElMessage.success("退出登录");
             this.user = null
             this.token = null
-            localStorage.clear()
+            localStorage.removeItem('TOKEN')
+            localStorage.removeItem('user')
             setTimeout(() => {
                 router.push("/login")
             }, 800);

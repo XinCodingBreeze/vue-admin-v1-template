@@ -4,41 +4,36 @@ import * as XLSX from "xlsx-js-style";
 
 
 /**
+ * 生成 Excel 列名 (A, B, ..., Z, AA, AB, ...)
+ * @param {number} colCount 列数
+ * @returns {string[]}
+ */
+const getColumnNames = (colCount) => {
+    const cols = [];
+    for (let i = 0; i < colCount; i++) {
+        let name = '';
+        let n = i;
+        do {
+            name = String.fromCharCode(65 + (n % 26)) + name;
+            n = Math.floor(n / 26) - 1;
+        } while (n >= 0);
+        cols.push(name);
+    }
+    return cols;
+};
+
+/**
  * 为表格添加样式
  * @param {*} ws 工作表
- * @param {*} WbLength  表格个数
+ * @param {*} WbLength  表格行数
  */
 const addStyle = (ws, WbLength) => {
-    // 循环设置表格样式
-    let arr = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-        'AA'
-    ];
+    const range = ws['!ref'];
+    if (!range) return;
+    const decoded = XLSX.utils.decode_range(range);
+    const colCount = decoded.e.c + 1;
+    const arr = getColumnNames(colCount);
+
     for (let i = 0; i <= WbLength; i++) {
         arr.forEach((item) => {
             // 从B列开始
@@ -126,8 +121,6 @@ const removeUnwantedColumns = (tableDom) => {
  * @returns
  */
 const exportToExcel = async (element, WbLength = 999, name = '导出文件',) => {
-    console.log(element, name);
-
     let _min = 99;
     const wb = XLSX.utils.book_new();
     const xlsxParam = { raw: true };
@@ -144,7 +137,6 @@ const exportToExcel = async (element, WbLength = 999, name = '导出文件',) =>
             tableDom,
             xlsxParam
         );
-        console.log(ws);
 
         if (ws) {
             XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
@@ -167,21 +159,13 @@ const exportToExcel = async (element, WbLength = 999, name = '导出文件',) =>
     // 设置表格宽度
     if (wb.Sheets.Sheet1) {
         wb.Sheets.Sheet1["!cols"] = [];
-
-        // wb.Sheets.Sheet1["!rows"] = [];
+        wb.Sheets.Sheet1["!rows"] = [];
         for (let i = 0; i < _min; i++) {
-            // 第一行的高度为hpx: 30
             if (i === 0) {
                 wb.Sheets.Sheet1["!rows"].push({ hpx: 30 });
             }
             wb.Sheets.Sheet1["!cols"].push({ wpx: 150 });
         }
-        // 尝试冻结首行
-        wb.Sheets.Sheet1["!view"] = {
-            冻结窗格: "A2"
-        };
-        console.log(wb.Sheets);
-
     }
 
     // 导出excel文件名
@@ -199,7 +183,7 @@ const exportToExcel = async (element, WbLength = 999, name = '导出文件',) =>
             fileName
         );
     } catch (e) {
-        console.log(e, wbout);
+        console.error(e);
     }
     return wbout;
 };

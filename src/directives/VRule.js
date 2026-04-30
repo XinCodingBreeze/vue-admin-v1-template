@@ -1,27 +1,28 @@
 /**
- * 权限按钮
+ * 权限按钮指令
+ * 用法: v-rule="'shop:create'"
+ * 权限列表应从用户状态中获取，此处提供 getPermissionList 方法供外部注入
  */
 
-// mock后台返回数据
-const permissionList = [
-    "xiaoxin-bt:shop:create",
-    "xiaoxin-bt:shop:edit",
-    "xiaoxin-bt:shop:delete",
-];
+let permissionList = [];
 
-export const VRule = (el, bind) => {
-    console.log(el, bind);
+/**
+ * 设置权限列表（登录后调用）
+ */
+export const setPermissionList = (list) => {
+    permissionList = list || [];
+};
 
-    if (!bind.value) {
+function checkPermission(el, binding) {
+    if (!binding.value) {
         return;
     }
-    const { value } = bind; // 获取权限
-
-    const userId = localStorage.getItem("userId"); // 获取用户id
-    if (permissionList.includes(`${userId }:${ value}`)) {
-        return;
-    } else {
-        // el.style.display = "none";
-        el.remove();
+    if (!permissionList.includes(binding.value)) {
+        el.parentNode?.removeChild(el);
     }
+}
+
+export const VRule = {
+    mounted: checkPermission,
+    updated: checkPermission,
 };

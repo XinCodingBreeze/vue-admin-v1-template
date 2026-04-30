@@ -128,7 +128,6 @@ const emit = defineEmits(["update:modelValue"]);
 const FILE_URL = "/file/uploadFile";
 const fileList = ref([]);
 const handleRemove = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles);
   handleEmit();
 };
 const handleExceed = () => {
@@ -145,8 +144,7 @@ const handleEdit = (item) => {
   showEditor.value = true;
 };
 
-const handleSaveEdit = (imageData) => {
-  console.log(imageData, "imageData");
+const handleSaveEdit = () => {
 };
 watch(
   () => props.modelValue,
@@ -164,8 +162,6 @@ const handleInit = () => {
     }
     arr = v.split(",");
   } else {
-    console.log(2222);
-
     if (v == null || v == undefined) {
       v = [];
     }
@@ -206,20 +202,16 @@ const handleEmit = () => {
     } else {
       value = value = imageUrl.value;
     }
-    console.log(value);
     emit("update:modelValue", value);
   });
 };
 const imageUrl = ref("");
 const handleSuccess = (response, file, fileList) => {
-  console.log("handleSuccess:", response, file, fileList);
   if (props.limit == 1) {
     imageUrl.value = response.entity.fileUrl;
     handleEmit();
     return;
   }
-
-  console.log(fileList.map((item) => item.status));
   let len = fileList
     .map((item) => {
       return item.status ? item.status : "success";
@@ -233,7 +225,6 @@ const handleSuccess = (response, file, fileList) => {
 };
 
 const beforeUpload = async (file) => {
-  console.log(file, "fielfllfelel");
   const isImage = file.type.startsWith("image/");
   if (!isImage) {
     ElMessage.error("只能上传图片文件!");
@@ -266,29 +257,20 @@ const handlerCompressorjs = (file) => {
         resolve(compressedFile);
       },
       error: (e) => {
-        console.log("压缩失败");
-        console.log(e);
+        console.error("压缩失败", e);
         reject(e);
       },
     });
   });
 };
 
-// const handleChange = () => {
-//   console.log("change[=================]");
-//   handleEmit();
-// }
 onMounted(() => {
-  console.log("[upload image]");
-  console.log(props.modelValue);
   handleInit();
 });
 
 const dialogImageUrl = ref("");
 const dialogVisible = ref(false);
 const handlePictureCardPreview = (uploadFile) => {
-  console.log("打开了");
-
   dialogImageUrl.value = uploadFile.url;
   if (!props.isShowImage) {
     dialogVisible.value = true;

@@ -65,7 +65,6 @@
 import layoutAside from "@/layout/layout-aside/index.vue";
 const route = useRoute();
 import { useUserStore } from "@/store";
-import { ElMessage, ElMessageBox } from "element-plus";
 const userStore = useUserStore();
 
 const userInfo = computed(() => userStore.user);
@@ -77,7 +76,7 @@ const handleLogout = () => {
 
 // 修改密码
 const handleChangePassword = () => {
-  console.log("修改密码");
+  // TODO: 实现修改密码功能
 };
 </script>
 

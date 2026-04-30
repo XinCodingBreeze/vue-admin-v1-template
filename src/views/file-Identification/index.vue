@@ -89,7 +89,6 @@ const startRecognition = async () => {
     const {
       data: { text },
     } = await worker.recognize(imageUrl.value);
-    console.log(text, "识别结果");
     recognizedText.value = text;
   } catch (error) {
     ElMessage.error("识别失败，请重试");

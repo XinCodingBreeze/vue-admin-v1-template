@@ -10,5 +10,5 @@ export default {
   name: "表格",
   icon: "Setting",
   menuOrder: 5,
-  isPageShow: false,
+  isPageShow: true,
 };

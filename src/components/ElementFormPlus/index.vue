@@ -60,18 +60,16 @@ const props = defineProps({
  * @param {*} btnItem 按钮配置
  */
 const handleButtonClick = async (btnItem) => {
-  if (btnItem.text === "提交" || btnItem.text === "新增") {
+  if (btnItem.action === "submit") {
     try {
-      //  校验
       await ruleFormRef.value.validate((valid) => {
         if (valid) {
-          //  提交
           btnItem.click(props.formList.formData);
         } else {
           return false;
         }
       });
-    } catch (error) {
+    } catch {
       return false;
     }
   } else {
