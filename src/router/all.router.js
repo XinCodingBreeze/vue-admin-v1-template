@@ -1,6 +1,7 @@
 
     export const ROUTERSDATA = {
     "@/views/aI-helper/index.vue":()=>import("@/views/aI-helper/index.vue"),
+"@/views/demo/index.vue":()=>import("@/views/demo/index.vue"),
 "@/views/error/403/index.vue":()=>import("@/views/error/403/index.vue"),
 "@/views/error/404/index.vue":()=>import("@/views/error/404/index.vue"),
 "@/views/error/500/index.vue":()=>import("@/views/error/500/index.vue"),
