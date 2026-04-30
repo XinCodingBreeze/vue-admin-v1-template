@@ -18,6 +18,28 @@
 - **自定义指令**：提供懒加载、拖拽、权限控制等实用指令
 - **性能优化**：支持 Gzip 压缩、代码分割、资源优化
 
+## 界面预览
+
+### 登录页面
+
+![登录页面](doc/screenshots/login.png)
+
+### 文件识别（OCR）
+
+![文件识别](doc/screenshots/file-identification.png)
+
+### AI 助手
+
+![AI 助手](doc/screenshots/ai-helper.png)
+
+### 示例页面
+
+![示例页面](doc/screenshots/demo.png)
+
+### 表格页面
+
+![表格页面](doc/screenshots/table.png)
+
 ## 技术栈
 
 | 类别     | 技术                              | 说明                  |
